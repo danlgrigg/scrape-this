@@ -49,20 +49,21 @@ app.get("/scrape", function(req, res) {
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
-        .children("h2")
+        .find(".article-headline")
         .text();
-      result.link = $(this)
-        .children("a")
-        .attr("img");
+      result.image = $(this)
+        .find("img")
+        .attr("src");
       result.link = $(this)
         .children("a")
         .attr("href");
+        result.link = ("http://www.mentalfloss.com" + result.link)
 
-      // Create a new Article using the `result` object built from scraping
+
       db.Article.create(result)
-        .then(function(dbArticle) {
+        .then(function(dbArticles) {
           // View the added result in the console
-          console.log(dbArticle);
+          console.log(dbArticles);
         })
         .catch(function(err) {
           // If an error occurred, log it
@@ -80,9 +81,9 @@ app.get("/scrape", function(req, res) {
 app.get("/articles", function(req, res) {
   // Grab every document in the Articles collection
   db.Article.find({})
-    .then(function(dbArticle) {
+    .then(function(dbArticles) {
       // If we were able to successfully find Articles, send them back to the client
-      res.json(dbArticle);
+      res.json(dbArticles);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
@@ -96,9 +97,9 @@ app.get("/articles/:id", function(req, res) {
   db.Article.findOne({ _id: req.params.id })
     // ..and populate all of the notes associated with it
     .populate("note")
-    .then(function(dbArticle) {
+    .then(function(dbArticles) {
       // If we were able to successfully find an Article with the given id, send it back to the client
-      res.json(dbArticle);
+      res.json(dbArticles);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
@@ -116,9 +117,9 @@ app.post("/articles/:id", function(req, res) {
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
     })
-    .then(function(dbArticle) {
+    .then(function(dbArticles) {
       // If we were able to successfully update an Article, send it back to the client
-      res.json(dbArticle);
+      res.json(dbArticles);
     })
     .catch(function(err) {
       // If an error occurred, send it to the client
