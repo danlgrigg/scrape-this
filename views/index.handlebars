@@ -1,46 +1,34 @@
+<div>
+  {{!-- Throw jumbotron here --}}
+  <h1 class="card justify-content-center">Mental Floss Lists are Insane</h1>
+  <div class="row">
+    <div class="col-6"></div>
+    <h5 class="card">Click "Scrape-This" to get the latest lists!</h5>
+    <button>Scrape-This</button>
+  </div>
+</div>
+
 <h1>Mental Floss Fun Lists!</h1>
 
 
   {{#each article}}
-  <li>
-    <p>
-      {{this.id}}. {{this.plan}}
-
-      <button data-planid="{{this.id}}" class="delplan">Delete Plan!</button>
-    </p>
-  </li>
+      {{this.id}}. {{this.title}}. {{this.image}}. {{this.link}}.{{this.note}}
+      <button data-articleid="{{this.id}}" class="delnote">Delete Note</button>
   {{/each}}
-</ul>
 
-<h2>Create a Plan</h2>
-<form id="createplan" class="button-size">
-  <textarea type="text" name="plan"></textarea>
-  <button type="submit">Save Plan!</button>
-</form>
-
-<h2>Update a Plan</h2>
-<form id="updateplan" class="button-size">
-  <select name="id">
-		{{#each article}}
-			<option value="{{this.id}}">{{this.plan}}</option>
-		{{/each}}
-	</select>
-  <textarea type="text" name="plan" placeholder="plan"></textarea>
-  <button type="submit">Update Plan!</button>
-</form>
-
+{{!-- 
 <script type="text/javascript">
-  $(".delplan").on("click", function(event) {
+  $(".delnote").on("click", function(event) {
     // Get the ID from the button.
     // This is shorthand for $(this).attr("data-planid")
-    var id = $(this).data("planid");
+    var id = $(this).data("noteid");
 
     // Send the DELETE request.
-    $.ajax("/api/plans/" + id, {
+    $.ajax("/api/notes/" + id, {
       type: "DELETE"
     }).then(
       function() {
-        console.log("deleted id ", id);
+        console.log("deleted note ", id);
         // Reload the page to get the updated list
         location.reload();
       }
@@ -92,4 +80,4 @@
       }
     );
   });
-</script>
+</script> --}}
